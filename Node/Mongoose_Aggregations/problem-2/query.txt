@@ -1,0 +1,302 @@
+use problem-1
+switched to db problem-1
+db["customers"].find()
+{
+  _id: 'C1001',
+  name: 'Alice',
+  city: 'New York'
+}
+{
+  _id: 'C1002',
+  name: 'Bob',
+  city: 'Los Angeles'
+}
+{
+  _id: 'C1003',
+  name: 'Charlie',
+  city: 'Chicago'
+}
+{
+  _id: 'C1004',
+  name: 'David',
+  city: 'Houston'
+}
+{
+  _id: 'C1005',
+  name: 'Eve',
+  city: 'Seattle'
+}
+{
+  _id: 1,
+  customerId: 'C1001',
+  amount: 500,
+  product: 'Laptop'
+}
+{
+  _id: 2,
+  customerId: 'C1002',
+  amount: 1200,
+  product: 'Phone'
+}
+{
+  _id: 3,
+  customerId: 'C1001',
+  amount: 300,
+  product: 'Headphones'
+}
+{
+  _id: 4,
+  customerId: 'C1003',
+  amount: 700,
+  product: 'Monitor'
+}
+{
+  _id: 5,
+  customerId: 'C1004',
+  amount: 400,
+  product: 'Keyboard'
+}
+{
+  _id: 6,
+  customerId: 'C1002',
+  amount: 800,
+  product: 'Tablet'
+}
+{
+  _id: 7,
+  customerId: 'C1005',
+  amount: 900,
+  product: 'Smartwatch'
+}
+db.customers.aggregate([{$group: {_id: "$customerId",totalAmountSpent: { $sum: "$amount" }}}])
+{
+  _id: 'C1004',
+  totalAmountSpent: 400
+}
+{
+  _id: 'C1005',
+  totalAmountSpent: 900
+}
+{
+  _id: null,
+  totalAmountSpent: 0
+}
+{
+  _id: 'C1002',
+  totalAmountSpent: 2000
+}
+{
+  _id: 'C1003',
+  totalAmountSpent: 700
+}
+{
+  _id: 'C1001',
+  totalAmountSpent: 800
+}
+db.customers.aggregate([{$lookup: {from: "customers",localField: "customerId",foreignField: "_id",as: "customerDetails"}},{$unwind: "$customerDetails"}])
+{
+  _id: 1,
+  customerId: 'C1001',
+  amount: 500,
+  product: 'Laptop',
+  customerDetails: {
+    _id: 'C1001',
+    name: 'Alice',
+    city: 'New York'
+  }
+}
+{
+  _id: 2,
+  customerId: 'C1002',
+  amount: 1200,
+  product: 'Phone',
+  customerDetails: {
+    _id: 'C1002',
+    name: 'Bob',
+    city: 'Los Angeles'
+  }
+}
+{
+  _id: 3,
+  customerId: 'C1001',
+  amount: 300,
+  product: 'Headphones',
+  customerDetails: {
+    _id: 'C1001',
+    name: 'Alice',
+    city: 'New York'
+  }
+}
+{
+  _id: 4,
+  customerId: 'C1003',
+  amount: 700,
+  product: 'Monitor',
+  customerDetails: {
+    _id: 'C1003',
+    name: 'Charlie',
+    city: 'Chicago'
+  }
+}
+{
+  _id: 5,
+  customerId: 'C1004',
+  amount: 400,
+  product: 'Keyboard',
+  customerDetails: {
+    _id: 'C1004',
+    name: 'David',
+    city: 'Houston'
+  }
+}
+{
+  _id: 6,
+  customerId: 'C1002',
+  amount: 800,
+  product: 'Tablet',
+  customerDetails: {
+    _id: 'C1002',
+    name: 'Bob',
+    city: 'Los Angeles'
+  }
+}
+{
+  _id: 7,
+  customerId: 'C1005',
+  amount: 900,
+  product: 'Smartwatch',
+  customerDetails: {
+    _id: 'C1005',
+    name: 'Eve',
+    city: 'Seattle'
+  }
+}
+db.customers.aggregate([{$match: {amount: { $gt: 500 }}}])
+{
+  _id: 2,
+  customerId: 'C1002',
+  amount: 1200,
+  product: 'Phone'
+}
+{
+  _id: 4,
+  customerId: 'C1003',
+  amount: 700,
+  product: 'Monitor'
+}
+{
+  _id: 6,
+  customerId: 'C1002',
+  amount: 800,
+  product: 'Tablet'
+}
+{
+  _id: 7,
+  customerId: 'C1005',
+  amount: 900,
+  product: 'Smartwatch'
+}
+db.customers.aggregate([{$group: {_id: "$customerId",totalAmountSpent: { $sum: "$amount" }}}])
+{
+  _id: 'C1004',
+  totalAmountSpent: 400
+}
+{
+  _id: 'C1005',
+  totalAmountSpent: 900
+}
+{
+  _id: null,
+  totalAmountSpent: 0
+}
+{
+  _id: 'C1002',
+  totalAmountSpent: 2000
+}
+{
+  _id: 'C1003',
+  totalAmountSpent: 700
+}
+{
+  _id: 'C1001',
+  totalAmountSpent: 800
+}
+db.customers.aggregate([{$lookup: {from: "customers",localField: "customerId",foreignField: "_id",as: "customerDetails"}},{$unwind: "$customerDetails"}])
+{
+  _id: 1,
+  customerId: 'C1001',
+  amount: 500,
+  product: 'Laptop',
+  customerDetails: {
+    _id: 'C1001',
+    name: 'Alice',
+    city: 'New York'
+  }
+}
+{
+  _id: 2,
+  customerId: 'C1002',
+  amount: 1200,
+  product: 'Phone',
+  customerDetails: {
+    _id: 'C1002',
+    name: 'Bob',
+    city: 'Los Angeles'
+  }
+}
+{
+  _id: 3,
+  customerId: 'C1001',
+  amount: 300,
+  product: 'Headphones',
+  customerDetails: {
+    _id: 'C1001',
+    name: 'Alice',
+    city: 'New York'
+  }
+}
+{
+  _id: 4,
+  customerId: 'C1003',
+  amount: 700,
+  product: 'Monitor',
+  customerDetails: {
+    _id: 'C1003',
+    name: 'Charlie',
+    city: 'Chicago'
+  }
+}
+{
+  _id: 5,
+  customerId: 'C1004',
+  amount: 400,
+  product: 'Keyboard',
+  customerDetails: {
+    _id: 'C1004',
+    name: 'David',
+    city: 'Houston'
+  }
+}
+{
+  _id: 6,
+  customerId: 'C1002',
+  amount: 800,
+  product: 'Tablet',
+  customerDetails: {
+    _id: 'C1002',
+    name: 'Bob',
+    city: 'Los Angeles'
+  }
+}
+{
+  _id: 7,
+  customerId: 'C1005',
+  amount: 900,
+  product: 'Smartwatch',
+  customerDetails: {
+    _id: 'C1005',
+    name: 'Eve',
+    city: 'Seattle'
+  }
+}
+db.customers.aggregate([{$match: {amount: { $gt: 500 }}}])

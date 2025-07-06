@@ -1,0 +1,129 @@
+use problem-1
+switched to db problem-1
+db.sales.aggregate([{$group: {_id: "$category",totalSales: { $sum: "$amount" }}}])
+{
+  _id: 'Electronics',
+  totalSales: 3300
+}
+{
+  _id: 'Fashion',
+  totalSales: 800
+}
+db.sales.aggregate([{$addFields: {month: { $month: { $toDate: "$date" } }}},{$group: {_id: "$month",totalSales: { $sum: "$amount" }}},{$sort: { _id: 1 }}])
+{
+  _id: 1,
+  totalSales: 1000
+}
+{
+  _id: 2,
+  totalSales: 1400
+}
+{
+  _id: 3,
+  totalSales: 1300
+}
+{
+  _id: 4,
+  totalSales: 400
+}
+db.sales.aggregate([{$group: {_id: "$product",totalRevenue: { $sum: "$amount" }}},{$sort: { totalRevenue: -1 }},{$limit: 1}])
+{
+  _id: 'Laptop',
+  totalRevenue: 1650
+}
+db.sales.aggregate([{$group: {_id: null,avgSaleAmount: { $avg: "$amount" }}}])
+{
+  _id: null,
+  avgSaleAmount: 455.55555555555554
+}
+db.sales.aggregate([{$addFields: {month: { $month: { $toDate: "$date" } }}},{$group: {_id: "$month",salesCount: { $sum: 1 }}},{$sort: { _id: 1 }}])
+{
+  _id: 1,
+  salesCount: 2
+}
+{
+  _id: 2,
+  salesCount: 3
+}
+{
+  _id: 3,
+  salesCount: 2
+}
+{
+  _id: 4,
+  salesCount: 2
+}
+db.sales.aggregate([{$group: {_id: "$region",totalSales: { $sum: "$amount" }}}])
+{
+  _id: 'South',
+  totalSales: 900
+}
+{
+  _id: 'North',
+  totalSales: 1300
+}
+{
+  _id: 'East',
+  totalSales: 50
+}
+{
+  _id: 'West',
+  totalSales: 1850
+}
+db.sales.aggregate([{$group: {_id: "$product",totalRevenue: { $sum: "$amount" }}}, {$sort: { totalRevenue: -1 }},{$limit: 3])
+SyntaxError: Unexpected token, expected "," (1:123)
+
+[0m[31m[1m>[22m[39m[90m 1 |[39m db[33m.[39msales[33m.[39maggregate([{$group[33m:[39m {_id[33m:[39m [32m"$product"[39m[33m,[39mtotalRevenue[33m:[39m { $sum[33m:[39m [32m"$amount"[39m }}}[33m,[39m {$sort[33m:[39m { totalRevenue[33m:[39m [33m-[39m[35m1[39m }}[33m,[39m{$limit[33m:[39m [35m3[39m])
+ [90m   |[39m                                                                                                                            [31m[1m^[22m[39m
+ [90m 2 |[39m[0m
+db.sales.aggregate([{$group: {_id: "$product",totalRevenue: { $sum: "$amount" }}},{$sort: { totalRevenue: -1 }},{$limit: 3}])
+
+{
+  _id: 'Laptop',
+  totalRevenue: 1650
+}
+{
+  _id: 'TV',
+  totalRevenue: 1000
+}
+{
+  _id: 'Mobile',
+  totalRevenue: 500
+}
+db.sales.aggregate([{$group: {_id: "$category",transactionCount: { $sum: 1 }}}])
+{
+  _id: 'Fashion',
+  transactionCount: 4
+}
+{
+  _id: 'Electronics',
+  transactionCount: 5
+}
+db.sales.aggregate([{$group: {_id: "$region",averageAmount: { $avg: "$amount" }}}])
+{
+  _id: 'North',
+  averageAmount: 433.3333333333333
+}
+{
+  _id: 'South',
+  averageAmount: 300
+}
+{
+  _id: 'East',
+  averageAmount: 50
+}
+{
+  _id: 'West',
+  averageAmount: 925
+}
+db.sales.aggregate([{$match: {category: { $in: ["Electronics", "Fashion"] }}},{$group: {_id: "$category",totalSales: { $sum: "$amount" }}}])
+{
+  _id: 'Fashion',
+  totalSales: 800
+}
+{
+  _id: 'Electronics',
+  totalSales: 3300
+}
+problem-1
+
