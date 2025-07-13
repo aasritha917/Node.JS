@@ -9,18 +9,14 @@ const errorHandler = require('./middlewares/errorHandler');
 dotenv.config();
 const app = express();
 
-// Middleware
 app.use(express.json());
 app.use(logger);
 
-// Routes
 app.use('/authors', authorRoutes);
 app.use('/books', bookRoutes);
 
-// Error handler
 app.use(errorHandler);
 
-// DB Connect + Server start
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 .then(() => {
     console.log('MongoDB connected');

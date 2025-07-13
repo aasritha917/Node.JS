@@ -7,7 +7,9 @@ exports.getAllBooks = async (req, res) => {
 
 exports.getBookById = async (req, res) => {
   const book = await Book.findById(req.params.id).populate('author');
-  if (!book) return res.status(404).json({ error: 'Book not found' });
+  if (!book)
+    return
+  res.status(404).json({ error: 'Book not found' });
   res.json(book);
 };
 
@@ -19,13 +21,17 @@ exports.createBook = async (req, res) => {
 
 exports.updateBook = async (req, res) => {
   const book = await Book.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  if (!book) return res.status(404).json({ error: 'Book not found' });
+  if (!book)
+    return
+  res.status(404).json({ error: 'Book not found' });
   res.json(book);
 };
 
 exports.deleteBook = async (req, res) => {
   const book = await Book.findByIdAndDelete(req.params.id);
-  if (!book) return res.status(404).json({ error: 'Book not found' });
+  if (!book)
+    return
+  res.status(404).json({ error: 'Book not found' });
   res.json({ message: 'Book deleted successfully' });
 };
 
