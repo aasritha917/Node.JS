@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head><title>Auth App</title></head>
+<body>
+  <h2>Register</h2>
+  <input id="reg-username" placeholder="Username" /><br>
+  <input id="reg-email" placeholder="Email" /><br>
+  <input id="reg-password" type="password" placeholder="Password" /><br>
+  <button onclick="register()">Register</button>
+
+  <h2>Login</h2>
+  <input id="login-email" placeholder="Email" /><br>
+  <input id="login-password" type="password" placeholder="Password" /><br>
+  <button onclick="login()">Login</button>
+
+  <h2>Dashboard</h2>
+  <div id="dashboard"></div>
+
+  <script>
+    const API = "https://firstfullstack-w95o.onrender.com";
+
+    async function register() {
+      const res = await fetch(`${API}/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: document.getElementById("reg-username").value,
+          email: document.getElementById("reg-email").value,
+          password: document.getElementById("reg-password").value,
+        }),
+      });
+      alert("Registered!");
+    }
+
+    async function login() {
+      const res = await fetch(`${API}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: document.getElementById("login-email").value,
+          password: document.getElementById("login-password").value,
+        }),
+      });
+      const data = await res.json();
+      localStorage.setItem("token", data.token);
+      loadDashboard();
+    }
+
+    async function loadDashboard() {
+      const res = await fetch(`${API}/users/profile`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      const user = await res.json();
+      document.getElementById("dashboard").innerText = `Welcome, ${user.username} (${user.role})`;
+    }
+  </script>
+</body>
+</html>
