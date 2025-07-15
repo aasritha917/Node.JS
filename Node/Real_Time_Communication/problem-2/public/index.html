@@ -1,0 +1,82 @@
+node server.js
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Group Chat</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    #chatBox { height: 200px; overflow-y: scroll; border: 1px solid #aaa; padding: 10px; margin-bottom: 10px; }
+    #userList { margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+<h2>Real-Time Group Chat</h2>
+
+<div id="loginBox">
+  <input type="text" id="username" placeholder="Enter your name" />
+  <button onclick="joinChat()">Join Chat</button>
+</div>
+
+<div id="chatArea" style="display:none;">
+  <div id="chatBox"></div>
+  <input type="text" id="message" placeholder="Type your message..." />
+  <button onclick="sendMessage()">Send</button>
+  <br><br>
+  <input type="text" id="adminMsg" placeholder="Admin announcement" />
+  <button onclick="sendAdmin()">Send Admin Message</button>
+  <div id="userList"></div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  let username = "";
+
+  function joinChat() {
+    username = document.getElementById("username").value.trim();
+    if (username !== "") {
+      socket.emit("join", username);
+      document.getElementById("loginBox").style.display = "none";
+      document.getElementById("chatArea").style.display = "block";
+    }
+  }
+
+  function sendMessage() {
+    const msg = document.getElementById("message").value;
+    if (msg !== "") {
+      socket.emit("chatMessage", msg);
+      document.getElementById("message").value = "";
+    }
+  }
+
+  function sendAdmin() {
+    const msg = document.getElementById("adminMsg").value;
+    if (msg !== "" && username.toLowerCase() === "admin") {
+      socket.emit("adminMessage", msg);
+      document.getElementById("adminMsg").value = "";
+    } else {
+      alert("Only 'admin' can send admin messages.");
+    }
+  }
+
+  socket.on("chatMessage", (data) => {
+    const chatBox = document.getElementById("chatBox");
+    chatBox.innerHTML += `<div>${data}</div>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
+
+  socket.on("chatHistory", (history) => {
+    const chatBox = document.getElementById("chatBox");
+    history.forEach(msg => {
+      chatBox.innerHTML += `<div>${msg}</div>`;
+    });
+  });
+
+  socket.on("userList", (users) => {
+    document.getElementById("userList").innerHTML = "<b>Online:</b> " + users.join(", ");
+  });
+</script>
+
+</body>
+</html>
