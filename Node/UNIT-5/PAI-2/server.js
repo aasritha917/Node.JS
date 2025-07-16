@@ -17,14 +17,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.error('MongoDB connection error:', err));
-
+const connectToDB = async() => {
+    try {
+       await mongoose.connect(process.env.MONGO_URI)
+       console.log("connection successful")
+    } catch (err) {
+        console.log("erroe in connectiong")
+    }
+}
+connectToDB()
 //connectRedis();
 
 app.use('/api/v1/auth', authRoutes);
